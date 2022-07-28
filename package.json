@@ -1,0 +1,27 @@
+{
+  "name": "newnasa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm start --prefix server",
+    "client": "npm start --prefix client",
+    "both": "concurrently \"npm run server\" \"npm run client\"",
+    "deploy":"npm run build --prefix client && npm start --prefix server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdulBasitKagzi/newNasa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdulBasitKagzi/newNasa/issues"
+  },
+  "homepage": "https://github.com/AbdulBasitKagzi/newNasa#readme",
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}

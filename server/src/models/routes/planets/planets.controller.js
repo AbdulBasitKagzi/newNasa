@@ -1,9 +1,9 @@
 // making imports
-const { planets } = require("../../planets.model");
+const { getAllPlanets } = require("../../planets.model");
 
 // setting up function to get planets
-function httpgetAllPlanets(req, res) {
-  return res.status(200).json(planets);
+async function httpgetAllPlanets(req, res) {
+  return res.status(200).json(await getAllPlanets());
 }
 
 // exporting functions

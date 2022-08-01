@@ -2,8 +2,8 @@ const { rejects } = require("assert");
 const { parse } = require("csv-parse");
 const path = require("path");
 const fs = require("fs");
-
-const result = [];
+const planets = require("./planets.mongo");
+// const result = [];
 
 function ishabitablePlanet(planet) {
   return (
@@ -25,23 +25,51 @@ function loadPlanets() {
           columns: true,
         })
       )
-      .on("data", (data) => {
+      .on("data", async (data) => {
         if (ishabitablePlanet(data)) {
-          result.push(data);
+          // using upsert to make docs in the collection
+          await savePlanets(data);
         }
       })
       .on("error", (err) => {
         console.log("error", err);
         reject(err);
       })
-      .on("end", () => {
-        console.log("Total planets", result.length);
+      .on("end", async () => {
+        console.log("Total planets", (await getAllPlanets()).length);
         resolve();
       });
   });
 }
 
+// function to save planets to collection in mongo
+async function savePlanets(data) {
+  try {
+    // done with the help of upsert operation
+    await planets.updateOne(
+      {
+        kepler_name: data.kepler_name,
+      },
+      { kepler_name: data.kepler_name },
+      {
+        upsert: true,
+      }
+    );
+  } catch (err) {
+    console.log("error is there", err);
+  }
+}
+
+// to get all planets from mongo
+async function getAllPlanets() {
+  return await planets.find(
+    {},
+    // to remove version and id from our response
+    { __v: 0, _id: 0 }
+  );
+}
+
 module.exports = {
   loadPlanets,
-  planets: result,
+  getAllPlanets,
 };
